@@ -8,7 +8,7 @@
         <h2 class="single-title animate__animated animate__pulse animate__faster">
             {{- $taxonomy := .Data.Singular -}}
             {{- if eq $taxonomy "category" -}}
-                <i class="far fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;{{ .Title }}
+                <i class="fa-solid fa-rocket fa-fw" aria-hidden="true"></i>&nbsp;{{ .Title }}
             {{- else if eq $taxonomy "tag" -}}
                 <i class="fas fa-tag fa-fw" aria-hidden="true"></i>&nbsp;{{ .Title }}
             {{- else -}}
