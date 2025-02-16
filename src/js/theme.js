@@ -242,17 +242,24 @@ class Theme {
                                 });
                         } else finish(search());
                     } else if (searchConfig.type === 'algolia') {
-                        this._algoliaIndex = this._algoliaIndex || algoliasearch(searchConfig.algoliaAppID, searchConfig.algoliaSearchKey).initIndex(searchConfig.algoliaIndex);
+                        const { liteClient: algoliasearch } = window['algoliasearch/lite'];
+                        this._algoliaIndex = this._algoliaIndex || algoliasearch(searchConfig.algoliaAppID, searchConfig.algoliaSearchKey);
                         this._algoliaIndex
-                            .search(query, {
-                                offset: 0,
-                                length: maxResultLength * 8,
-                                attributesToHighlight: ['title'],
-                                attributesToSnippet: [`content:${snippetLength}`],
-                                highlightPreTag: `<${highlightTag}>`,
-                                highlightPostTag: `</${highlightTag}>`,
+                            .search({
+                                requests: [
+                                    {
+                                        indexName: searchConfig.algoliaIndex,
+                                        query: query,
+                                        offset: 0,
+                                        length: maxResultLength * 8,
+                                        attributesToHighlight: ['title'],
+                                        attributesToSnippet: [`content:${snippetLength}`],
+                                        highlightPreTag: `<${highlightTag}>`,
+                                        highlightPostTag: `</${highlightTag}>`,
+                                    }
+                                ]
                             })
-                            .then(({ hits }) => {
+                            .then(({ results: [{ hits }] }) => {
                                 const results = {};
                                 hits.forEach(({ uri, date, _highlightResult: { title }, _snippetResult: { content } }) => {
                                     if (results[uri] && results[uri].context.length > content.value) return;
@@ -692,7 +699,8 @@ class Theme {
         if (document.getElementById('comments')) {
             const $viewComments = document.getElementById('view-comments');
             $viewComments.href = `#comments`;
-            $viewComments.style.display = 'block';
+            $viewComments.parentElement.removeChild($viewComments);
+            document.getElementById('fixed-buttons').appendChild($viewComments);
         }
         const $fixedButtons = document.getElementById('fixed-buttons');
         const ACCURACY = 20, MINIMUM = 100;
