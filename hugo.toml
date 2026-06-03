@@ -136,12 +136,20 @@
     # Windows v8-11 磁贴颜色
     tileColor = "#da532c"
 
+  # Security config
+  # 安全配置
+  [params.security]
+    # Content-Security-Policy meta tag for when HTTP headers cannot be set
+    # https://content-security-policy.com/examples/meta/
+    # 当无法设置 HTTP 响应头时使用的 Content-Security-Policy meta 标签
+    # contentSecurityPolicy = "default-src 'self'"
+
   # Search config
   # 搜索配置
   [params.search]
     enable = false
-    # type of search engine ["lunr", "algolia"]
-    # 搜索引擎的类型 ["lunr", "algolia"]
+    # type of search engine ["lunr", "algolia", "fuse", "pagefind"]
+    # 搜索引擎的类型 ["lunr", "algolia", "fuse", "pagefind"]
     type = "lunr"
     # max index length of the chunked content
     # 文章内容最长索引长度
@@ -165,6 +173,19 @@
       index = ""
       appID = ""
       searchKey = ""
+    [params.search.fuse]
+      # https://fusejs.io/api/options.html
+      isCaseSensitive = false
+      minMatchCharLength = 2
+      findAllMatches = false
+      location = 0
+      threshold = 0.3
+      distance = 100
+      ignoreLocation = false
+    [params.search.pagefind]
+      # Pagefind base path (run "npx pagefind --site public" after hugo build)
+      # Pagefind 基础路径 (在 hugo 构建后运行 "npx pagefind --site public")
+      basePath = "/_pagefind/"
 
   # Home page config
   # 主页信息设置
@@ -209,7 +230,7 @@
   [params.social]
     GitHub = ""
     Linkedin = ""
-    Twitter = ""
+    X = ""
     Instagram = ""
     Facebook = ""
     Telegram = ""
@@ -275,14 +296,18 @@
     ORCID = ""
     Pleroma = ""
     Kaggle = ""
-    MediaWiki= ""
+    MediaWiki = ""
     Plume = ""
     HackTheBox = ""
-    RootMe= ""
+    RootMe = ""
     Malt = ""
     TikTok = ""
     TryHackMe = ""
     Codeberg = ""
+    HuggingFace = ""
+    Threads = ""
+    LeetCode = ""
+    LeetCodeCN = ""
     Email = ""
     Phone = ""
     RSS = ""
@@ -338,6 +363,9 @@
       # the maximum number of lines of displayed code by default
       # 默认展开显示的代码行数
       maxShownLines = 50
+    [params.page.code.render]
+      goat = true
+      mermaid = true
     # KaTeX mathematical formulas config (KaTeX https://katex.org/)
     # KaTeX 数学公式配置 (KaTeX https://katex.org/)
     [params.page.math]
@@ -384,7 +412,8 @@
     # 文章页面的分享信息设置
     [params.page.share]
       enable = true
-      Twitter = true
+      X = true
+      Threads = true
       Facebook = true
       Linkedin = false
       Whatsapp = false
@@ -406,7 +435,9 @@
       Evernote = false
       Skype = false
       Trello = false
+      Diaspora = true
       Mix = false
+      Telegram = true
     # Comment config
     # 评论系统设置
     [params.page.comment]
@@ -573,13 +604,12 @@
   # Analytics config
   # 网站分析配置
   [params.analytics]
-    enable = false
     # Google Analytics
     [params.analytics.google]
       id = ""
-      # whether to anonymize IP
-      # 是否匿名化用户 IP
-      anonymizeIP = true
+      # whether to respect the browser’s “do not track” setting
+      # 是否遵循浏览器的 “Do Not Track” 设置
+      respectDoNotTrack = false
     # Fathom Analytics
     [params.analytics.fathom]
       id = ""
